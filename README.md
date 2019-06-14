@@ -40,7 +40,7 @@ Ideas for third month:
  | CAD-120 | --- | --- | --- | --- | --- |
  | UTKinect-Action | [link](http://cvrc.ece.utexas.edu/KinectDatasets/HOJ3D.html) | --- | --- | --- | --- |
  | Florence 3D-Action | [link](https://www.micc.unifi.it/resources/datasets/florence-3d-actions-dataset/) | 10 | 9 | --- | 215 | 
- | MSR Action3D | | [link](https://www.uow.edu.au/~wanqing/#Datasets) | 10 | 20 | 20 | 567 | 
+ | MSR Action3D | [link](https://www.uow.edu.au/~wanqing/#Datasets) | | 10 | 20 | 20 | 567 | 
  | MSR DailyActivity3D | [link](https://users.eecs.northwestern.edu/~jwa368/my_data.html) | --- | 20 | --- | 320 | 
  | SYSU | [link](http://isee.sysu.edu.cn/~hujianfang/ProjectJOULE.html) | 40 | 12 | 20 | 480 | 
  | UWA 3D Multiview II | [link](http://staffhome.ecm.uwa.edu.au/~00053650/databases.html) | 10 | 30 | 20 | 1076 | 
@@ -71,3 +71,4 @@ Feature extraction
 2. Details about on-fly-testing. Is it done on the same CAD-60 datasets? Has fly-testing used together with reinforcement learning?
 3. How many layers does the ANN base classifier has in DBMM? (It has 40 neurons in hidden layers with hyperbolic tangent sigmoid activation function and normalized exponential (softmax)
 4. What else would be done in second and third months?
+5. How is pose distance defined?
