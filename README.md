@@ -2,12 +2,12 @@
 
 ## Objectives
 
-[] Classify human activities with >95 % precision
-[] Extend classification to different datasets
-[] Extend classification to different environments
+- [ ] Classify human activities with >95 % precision
+- [ ] Extend classification to different datasets
+- [ ] Extend classification to different environments
 *Future development*
-[] Extend to several humans in one video
-[] Follow up of a person, i.e. give same unique id to a person
+- [ ] Extend to several humans in one video
+- [ ] Follow up of a person, i.e. give same unique id to a person
 
 ## Outline of tasks to follow 
 
@@ -37,10 +37,10 @@ Ideas for third month:
  | --- | --- | --- | --- | --- | --- |  
  | CAD-60 | [link](http://pr.cs.cornell.edu/humanactivities/data.php) | 4 | 12 | 15 | 60 | 
  | CAD-120 | --- | --- | --- | --- | --- |
- | UTKinect-Action | [link] (http://cvrc.ece.utexas.edu/KinectDatasets/HOJ3D.html) | --- | --- | --- | --- |
- | Florence 3D-Action | [link] (https://www.micc.unifi.it/resources/datasets/florence-3d-actions-dataset/) | 10 | 9 | --- | 215 | 
+ | UTKinect-Action | [link](http://cvrc.ece.utexas.edu/KinectDatasets/HOJ3D.html) | --- | --- | --- | --- |
+ | Florence 3D-Action | [link](https://www.micc.unifi.it/resources/datasets/florence-3d-actions-dataset/) | 10 | 9 | --- | 215 | 
  | MSR Action3D | | [link](https://www.uow.edu.au/~wanqing/#Datasets) | 10 | 20 | 20 | 567 | 
- | MSR DailyActivity3D | [link] (https://users.eecs.northwestern.edu/~jwa368/my_data.html) | --- | 20 | --- | 320 | 
+ | MSR DailyActivity3D | [link](https://users.eecs.northwestern.edu/~jwa368/my_data.html) | --- | 20 | --- | 320 | 
  | SYSU | [link](http://isee.sysu.edu.cn/~hujianfang/ProjectJOULE.html) | 40 | 12 | 20 | 480 | 
  | UWA 3D Multiview II | [link](http://staffhome.ecm.uwa.edu.au/~00053650/databases.html) | 10 | 30 | 20 | 1076 | 
  | SBU Kinect | [link](https://www3.cs.stonybrook.edu/~kyun/research/kinect_interaction/index.html) | 7 | 8 | 15 | 300 | 
