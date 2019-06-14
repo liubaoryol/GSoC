@@ -62,9 +62,11 @@ Human Action Recognition by Representing 3D Skeletons as Points in a Lie Group, 
 A Human Activity Recognition System Based on Dynamic Clustering of Skeleton Data, Alessandro Manzi, Paolo Dario and Filippo Cavallo, 2017  [link](https://core.ac.uk/download/pdf/84495658.pdf)
 
 ## Explanation of scripts
-classes.py -- code where class Person() is defined, with other necessary functions that are needed for class Person (read the data activities from folders)
-read_data.py is where we create objects of class Person() and use its functions
-To add: 
+- classes.py -- code where class Person() is defined, with other necessary functions that are needed for class Person (read the data activities from folders)
+
+- read_data.py is where we create objects of class Person() and use its functions
+
+- To add: 
 separation into environments. 
 Feature extraction
 
