@@ -35,17 +35,18 @@ Ideas for third month:
 
 ## Datasets
 
-| Dataset Name | Link | # subjects | # activities |  # joints |  # total samples | 
+| Dataset Name | Link | # subjects | # activities |  # joints | # environments | # total samples | 
  | --- | --- | --- | --- | --- | --- |  
- | CAD-60 | [link](http://pr.cs.cornell.edu/humanactivities/data.php) | 4 | 12 | 15 | 60 | 
- | CAD-120 | --- | --- | --- | --- | --- |
- | UTKinect-Action | [link](http://cvrc.ece.utexas.edu/KinectDatasets/HOJ3D.html) | --- | --- | --- | --- |
- | Florence 3D-Action | [link](https://www.micc.unifi.it/resources/datasets/florence-3d-actions-dataset/) | 10 | 9 | --- | 215 | 
+ | CAD-60 | [link](http://pr.cs.cornell.edu/humanactivities/data.php) | 4 | 12 | 15 | 5 |60 | 
+ | CAD-120 | [link](http://pr.cs.cornell.edu/humanactivities/data.php) | 4 | 10 (+10 subactivities) | 15 | --- | 120 |
+ | UTKinect-Action | [link](http://cvrc.ece.utexas.edu/KinectDatasets/HOJ3D.html) | 10 | 10 | 20 | --- | --- |
+ | Florence 3D-Action | [link](https://www.micc.unifi.it/resources/datasets/florence-3d-actions-dataset/) | 10 | 9 | --- | --- | 215 | 
  | MSR Action3D | [link](https://www.uow.edu.au/~wanqing/#Datasets) | | 10 | 20 | 20 | 567 | 
- | MSR DailyActivity3D | [link](https://users.eecs.northwestern.edu/~jwa368/my_data.html) | --- | 20 | --- | 320 | 
- | SYSU | [link](http://isee.sysu.edu.cn/~hujianfang/ProjectJOULE.html) | 40 | 12 | 20 | 480 | 
- | UWA 3D Multiview II | [link](http://staffhome.ecm.uwa.edu.au/~00053650/databases.html) | 10 | 30 | 20 | 1076 | 
- | SBU Kinect | [link](https://www3.cs.stonybrook.edu/~kyun/research/kinect_interaction/index.html) | 7 | 8 | 15 | 300 | 
+ | MSR DailyActivity3D | [link](https://users.eecs.northwestern.edu/~jwa368/my_data.html) | --- | 20 | --- | --- | 320 | 
+ | SYSU | [link](http://isee.sysu.edu.cn/~hujianfang/ProjectJOULE.html) | 40 | 12 | 20 | --- | 480 | 
+ | UWA 3D Multiview II | [link](http://staffhome.ecm.uwa.edu.au/~00053650/databases.html) | 10 | 30 | 20 | --- | 1076 | 
+ | SBU Kinect | [link](https://www3.cs.stonybrook.edu/~kyun/research/kinect_interaction/index.html) | 7 | 8 | 15 | --- | 300 | 
+ | KARD | [link](https://data.mendeley.com/datasets/k28dtm7tr6/1) | 10 | 18 | --- | --- | --- |
 
 ## Articles
 
