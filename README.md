@@ -5,7 +5,8 @@
 - [ ] Classify human activities with >95 % precision
 - [ ] Extend classification to different datasets
 - [ ] Extend classification to different environments
-*Future development*
+
+**Future development**
 - [ ] Extend to several humans in one video
 - [ ] Follow up of a person, i.e. give same unique id to a person
 
