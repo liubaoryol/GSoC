@@ -36,7 +36,7 @@ Ideas for third month:
 ## Datasets
 
 | Dataset Name | Link | # subjects | # activities |  # joints | # environments | # total samples | 
- | --- | --- | --- | --- | --- | --- |  
+ | --- | --- | --- | --- | --- | --- |  --- |
  | CAD-60 | [link](http://pr.cs.cornell.edu/humanactivities/data.php) | 4 | 12 | 15 | 5 |60 | 
  | CAD-120 | [link](http://pr.cs.cornell.edu/humanactivities/data.php) | 4 | 10 (+10 subactivities) | 15 | --- | 120 |
  | UTKinect-Action | [link](http://cvrc.ece.utexas.edu/KinectDatasets/HOJ3D.html) | 10 | 10 | 20 | --- | --- |
