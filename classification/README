@@ -1,0 +1,6 @@
+ Start with a multi-class linear SVM as mentioned in these papers.
+Improve classifiers. Change DBMM base classifiers to my proposals:
+
+LSTM
+Lie groups
+
