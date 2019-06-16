@@ -16,12 +16,7 @@
 First month (work on CAD-60):
 1. Read and open dataset
 2. Divide datasets to environments
-2. *Feature extraction*. Starting point:
-
-- https://cs.aston.ac.uk/~fariad/publications/ROMAN14_0187_FI.pdf
-- https://cs.aston.ac.uk/~fariad/publications/CC_DF_UN_NB@IROS16.pdf
-- https://cs.aston.ac.uk/~fariad/publications/ieee_roman15_dfaria.pdf
-3. Choose the appropiated features using Multivariate Analysis
+2. *Feature extraction*.
 3. Test a few classifiers. Start with a multi-class linear SVM as mentioned in these papers.
 4. Improve classifiers. Change DBMM base classifiers to my proposals.
 
