@@ -1,10 +1,10 @@
 import os
 import numpy as np
-import classes.py
+import classes
 # set working directory
-dir = "/home/liuba/Documents/GSoC/data/data1"
+dirs = "/home/liuba/Documents/GSoC/data/data1"
 
-person1=Person()
-person1.read_activity_from_folder()
+person1=classes.Person()
+person1.read_activity_from_folder(dirs)
 
-person1.activity[0]
+
