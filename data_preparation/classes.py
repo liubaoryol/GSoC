@@ -1,7 +1,6 @@
 import os
 import numpy as np
 
-class Person:
 '''
 Class person has two variables: the one that is composed of activities and the second are the label to each entry of the activity variable
 
@@ -29,11 +28,16 @@ office
     - talking on the phone
     - writing on whiteboard
     - drinking water
-    - working on computer'
-'''
-    def __init__(self,act=[],label=[]):
-        self.activity = act
-        self.label = label
+    - working on computer'''
+
+
+
+
+class Person:
+
+    def __init__(self):
+        self.activity = []
+        self.label = []
 
 #This function is for converting the activity file into a numpy array of n rows, corresponding to frames of the activity
     def string2list(self,stringact):
@@ -76,7 +80,7 @@ office
     #Adding activity if person performs a new activity
     def add_activity(self,act,lab):
         self.activity.append(act)
-	self.label.append(lab)
+        self.label.append(lab)
 
     
     
