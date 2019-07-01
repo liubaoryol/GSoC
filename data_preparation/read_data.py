@@ -2,7 +2,10 @@ import os
 import numpy as np
 import classes
 # set working directory
-dirs = "/home/liuba/Documents/GSoC/data/data1"
+dir1 = "/home/lytica/Documents/GSoC/data/data1"
+dir2 = "/home/lytica/Documents/GSoC/data/data2"
+dir3 = "/home/lytica/Documents/GSoC/data/data3"
+dir4 = "/home/lytica/Documents/GSoC/data/data4"
 
 person1=classes.Person()
 person1.read_activity_from_folder(dirs)
