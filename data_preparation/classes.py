@@ -39,16 +39,18 @@ class Person:
         self.activity = []
         self.label = []
 
-#This function is for converting the activity file into a numpy array of n rows, corresponding to frames of the activity
+    #This function is for converting the activity file into a numpy array of n rows, corresponding to frames of the activity
     def string2list(self,stringact):
-        tmp=stringact.split("\n")[:-2] #the -1 is to remove the line with the END word
+        tmp=stringact.split("\n")[:-1] #the -1 is to remove the line with the END word
         dim = [len(tmp),tmp[0].count(",")]
-        lista = np.zeros(dim)
+        lista = []
         for i in range(len(tmp)):
-            lista[i]=np.fromstring(tmp[i],sep=",")
+            nnmm=np.fromstring(tmp[i],sep=",")
+            lista.append(nnmm)
+            #lista=np.array(lista)
         return lista
 
-#The search function is used to find the position of an argument in a listo of lists. Consequently it is used to find the name of activity for a set of frames read from file
+    #The search function is used to find the position of an argument in a listo of lists. Consequently it is used to find the name of activity for a set of frames read from file
     def search(self,lst, item):
         for i in range(len(lst)):
             part = lst[i]
@@ -56,17 +58,18 @@ class Person:
                 if part[j] == item: return (i, j)
         return None
 
-#updating activity and labels
+    #updating activity and labels
     def read_activity_from_folder(self,folder):
         tmp = open(os.path.join(folder,"activityLabel.txt"),'r').read()
-        tmp = tmp.split("\n")[:-2]
+        tmp = tmp.split("\n")[:-1]
         activityList=[tmp[i].split(",") for i in range(len(tmp))]
         #np.loadtxt(folder,delimiter=",",unpack=True)
         entries = os.listdir(folder)
         for entry in entries:
             if entry.endswith(".txt") and "activity" not in entry:
                 with open(os.path.join(folder,entry),'r') as df:
-                    tmp=self.string2list(df.read()) 
+                    stringact = df.read()
+                    tmp=self.string2list(stringact) 
                     self.activity.append(tmp) 
                     name = os.path.splitext(entry)[0]
                     index=self.search(activityList,name)
@@ -82,5 +85,4 @@ class Person:
         self.activity.append(act)
         self.label.append(lab)
 
-    
-    
+

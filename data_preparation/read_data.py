@@ -2,13 +2,13 @@ import os
 import numpy as np
 import classes
 # set working directory
-dir1 = "/home/lytica/Documents/GSoC/data/data1"
-dir2 = "/home/lytica/Documents/GSoC/data/data2"
-dir3 = "/home/lytica/Documents/GSoC/data/data3"
-dir4 = "/home/lytica/Documents/GSoC/data/data4"
+dir1 = "/home/lytica/Documents/GSoC/GSoC/data/data1"
+dir2 = "/home/lytica/Documents/GSoC/GSoC/data/data2"
+dir3 = "/home/lytica/Documents/GSoC/GSoC/data/data3"
+dir4 = "/home/lytica/Documents/GSoC/GSoC/data/data4"
 
 person1=classes.Person()
-person1.read_activity_from_folder(dirs)
+person1.read_activity_from_folder(dir1)
 
 
 
@@ -30,19 +30,10 @@ Therefore it occurs to me three ways to represent the data:
 
 '''
 
-' As fist approach we will use only positions of joints, with each joint grouped in a 3D array.
-def pos(activities):
-	pos_act=np.array(activities)
-	cols = [] #Here we will save the positional cols
-	#Finding positions for the first 11 joints
-	for i in range(0,len(pos_act[0][0])-16,14):
-		cols.append([i+11,i+12,i+13]) 
-	cols=cols[:-1]
-	#Finding positions for the last 4 joints
-	for i in range(len(pos_act[0][0])-16,len(pos_act[0][0]),4):
-		cols.append([i,i+1,i+2])
-	for j in range(len(pos_act)):
-		pos_act[j] = pos_act[j][:,cols] #extracting the needed columns
-	return pos_act
-
 #Encapsular tambien cada posicion en un array
+
+
+                                                               
+
+
+
