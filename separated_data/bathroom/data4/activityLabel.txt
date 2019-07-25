@@ -1,0 +1,4 @@
+0512155606,rinsing mouth with water,
+0512155226,brushing teeth,
+0512160143,wearing contact lenses,
+0512160254,wearing contact lenses,

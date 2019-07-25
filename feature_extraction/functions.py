@@ -1,5 +1,6 @@
 #import numba
 from scipy.spatial import distance
+from sklearn.preprocessing import StandardScaler
 #import umap
 import numpy as np
 import math
@@ -143,14 +144,17 @@ def frame_feature_vector(activity,frame):
 	#2. do you think elbow movement carries a lot of information for us?
 	return features
 
-def activity_feature_vector(activity):
+def activity_feature_vector(activity,dim = 14):
+	#Devuelve un feature vector de toda la actividad.
 	n_frames = len(activity)
-	features_frames = [frame_feature_vector(activity,frame) for frame in range(n_frames)]
+	features_frames = [frame_feature_vector(activity,frame) for frame in range(n_frames)] #array of features for all frames in the activity
 	kynetic_energy = []
 	for k in features_frames:
 		ke = np.linalg.norm(k[4])+np.linalg.norm(k[5])
 		kynetic_energy.append(ke)
 	ke_sorted = np.argsort(kynetic_energy)
+	b = np.array([0,len(activity)-1])
+	ke_sorted = np.setdiff1d(ke_sorted,b,True)
 	for k in range(len(kynetic_energy)):
 		if ke_sorted[k+1]<ke_sorted[k]:
 			max_index = k
@@ -158,15 +162,39 @@ def activity_feature_vector(activity):
 		else:
 			continue
 	#ke_interest_index = [0,*ke_sorted[:max_index+1]]
-	ke_interest_index = np.sort([0,*ke_sorted[:12]])
+	ke_interest_index = np.sort([0,*ke_sorted[:dim-2]]) 
 	ke_interest_index = [*ke_interest_index,-1]
 	features = np.array(features_frames)[ke_interest_index]
 	#return [ke_interest_index,features]
 	return features
 
-def activities_feature_vector(activities):
-	activities_features = [activity_feature_vector(activity) for activity in activities]
+def activities_feature_vector(activities,dim = -1):
+	if dim == -1:
+		activities_features = [activity_feature_vector(activity,dim = len(activity)) for activity in activities]
+	else:
+		activities_features = [activity_feature_vector(activity,dim) for activity in activities]
 	return activities_features
+
+def partition_activity(activity_complete_feature,divisor):
+	#input is dim_features X n_frames
+	parted_activity = []
+	for i in range(len(activity_complete_feature)-divisor):
+		parted_activity.append(activity_complete_feature[i:i+divisor])
+	return np.array(parted_activity) #output is dim_features X divisor X (n_frames-divisor)
+
+def partition_activities(activities_complete_features,divisor):
+	parted_activities= [partition_activity(activities_complete_features[i],divisor) for i in range(len(activities_complete_features))]
+	return parted_activities #output is dim_features X divisor X (n_frames-divisor)
+
+def multiplicate_labels(parted_activities,labels):
+	multiple_labels = []
+	for i in range(len(parted_activities)):
+		for j in range(len(parted_activities[i])):
+			#print(i)
+			multiple_labels.append(labels[i])
+	return multiple_labels
+
+
 	
 '''
 def PCA(features):
