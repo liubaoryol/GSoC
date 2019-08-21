@@ -49,7 +49,7 @@ def base_autoencoder(trainX, testX):
 	# compile model
 	model.compile(loss='mse', optimizer=SGD(lr=0.01, momentum=0.9))
 	# fit model
-	model.fit(trainX, trainX, epochs=100, verbose=0)
+	model.fit(trainX, trainX, epochs=50, verbose=0)
 	# evaluate reconstruction loss
 	train_mse = model.evaluate(trainX, trainX, verbose=0)
 	test_mse = model.evaluate(testX, testX, verbose=0)
@@ -65,17 +65,19 @@ def evaluate_autoencoder_as_classifier(model, trainX, trainy, testX, testy):
 	# mark all remaining layers as non-trainable
 	for layer in model.layers:
 		layer.trainable = False
-	#model.add(Flatten())
+	model.add(Flatten())
 	# add new output layer
 	model.add(Dense(4, activation='softmax'))
 	# compile model
-	model.compile(loss='categorical_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9), metrics=['acc'])
+	#model.compile(loss='categorical_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9), metrics=['acc'])
+	model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
 	# fit model
-	model.fit(trainX, trainy, epochs=100, verbose=0)
+	model.fit(trainX, trainy, epochs=50, verbose=0)
 	# evaluate model
 	_, train_acc = model.evaluate(trainX, trainy, verbose=0)
 	_, test_acc = model.evaluate(testX, testy, verbose=0)
 	# put the model back together
+	model.pop()
 	model.pop()
 	model.add(output_layer)
 	model.compile(loss='mse', optimizer=SGD(lr=0.01, momentum=0.9))
