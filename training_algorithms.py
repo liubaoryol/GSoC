@@ -104,8 +104,8 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 	model.add(Conv2D(n_units[0], kernel_size=3, activation='relu', input_shape=(X_train.shape[1],X_train.shape[2],1)))
 	for i in range(n_layers-1):
 		model.add(Conv2D(n_units[i+1], kernel_size=3, activation='relu'))
-		model.add(MaxPooling2D(pool_size=2))
-		model.add(Dropout(0.3))
+		#model.add(MaxPooling2D(pool_size=2))
+		#model.add(Dropout(0.3))
 	model.add(Flatten())
 	model.add(Dense(len(set(y_test)), activation='softmax'))
 	#compile model using accuracy to measure model performance
@@ -115,7 +115,7 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 	checkpoint = ModelCheckpoint(filepath, monitor='val_acc', save_best_only=True, mode='max')
 	callbacks_list = [checkpoint]
 	#train the model
-	history = model.fit(X_train, y_train_num, validation_data=(X_test, y_test_num), epochs=50, callbacks = callbacks_list)
+	history = model.fit(X_train, y_train_num, validation_data=(X_test, y_test_num), epochs=10, callbacks = callbacks_list)
 	preprocessing_functions.save_history_training(history,"cnn",n_layers,n_units,out_dir)
 	#load the best saved model
 	model = Sequential()
@@ -140,7 +140,7 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 		                  normalize=True,
 		                  title=environment)
 	plt.close()
-	
+	return model,X_train,X_test,y_train_num,y_test_num
 
 
 def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=-1):
@@ -250,9 +250,15 @@ def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=
 		                  title=environment)
 
 	plt.close()
+	return model
 
 
-
-
+#Gives amazing results!!
+def transfer_learning(har_model,X_train,y_train_num,X_test,y_test_num):
+	#Transfer learning where we define weights to star the learning from. Weights are not freezed
+	model = Sequential()
+	model.add(har_model)
+	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+	history = model.fit(X_train, y_train_num, validation_data=(X_test, y_test_num), epochs=50)
 
 
