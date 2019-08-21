@@ -85,7 +85,7 @@ def joint_mvnt(activity, joint, frame_t1, frame_t0=0):
 	joint_t0 = activity[frame_t0][index_joint(joint)]
 	joint_t1 = activity[frame_t1][index_joint(joint)]
 	#dist = joint_t1-joint_t0
-	dist = [joint_t1[0]-joint_t0[0],joint_t1[1]-joint_t0[1]]
+	dist = [joint_t1[0]-joint_t0[0],joint_t1[1]-joint_t0[1],joint_t1[2]-joint_t0[2]]
 	return dist
 
 def normalize_by_height(activity):
@@ -116,6 +116,51 @@ def normalize_by_height_all(activities):
 def standardize_features(features):
 	sc = StandardScaler()
 	return sc.fit(features).transform(features)
+
+
+
+def rotation_matrix(angle, direction, point=None):
+	"""Return matrix to rotate about axis defined by point and direction."""
+	sina = math.sin(angle)
+	cosa = math.cos(angle)
+	# rotation matrix around unit vector
+	R = np.diag([cosa, cosa, cosa])
+	R += np.outer(direction, direction) * (1.0 - cosa)
+	direction *= sina
+	R += np.array([[ 0.0,         -direction[2],  direction[1]],
+		          [ direction[2], 0.0,          -direction[0]],
+		          [-direction[1], direction[0],  0.0]])
+	M = np.identity(3)
+	M[:3, :3] = R
+	if point is not None:
+		# rotation not around origin
+		point = np.array(point[:3], dtype=np.float64, copy=False)
+		M[:3, 3] = point - np.dot(R, point)
+	return M
+
+def frame_data_augmentation_rotation(activity,frame,angle=3.14159):
+	rot_matrix =rotation_matrix(angle,np.array([0.,0.,1.]))
+	rotated = np.zeros([activity[frame].shape[0],activity[frame].shape[1]])
+	rotated[:4] = activity[frame][:4]
+	for i in range(4,len(activity[frame])):
+		tmp = np.matmul(activity[frame][i],rot_matrix)
+		rotated[i] = tmp
+	return rotated
+
+
+
+def activity_data_augmentation_rotation(activity,angle=3.14159):
+	activity_rotated = np.zeros([activity.shape[0],activity.shape[1],activity.shape[2]])
+	for i in range(len(activity)):
+		activity_rotated[i] = frame_data_augmentation_rotation(activity,i,angle)
+	return activity_rotated
+		
+def activities_data_augmentation_rotation(activities,angle=3.14159):
+	act_rot = [np.zeros([activities[j].shape[0],activities[j].shape[1],activities[j].shape[2]]) for j in range(len(activities))]
+	for i in range(len(activities)):
+		act_rot[i] = activity_data_augmentation_rotation(activities[i],angle)
+	return act_rot
+		
 
 
 def frame_feature_vector(activity,frame):
