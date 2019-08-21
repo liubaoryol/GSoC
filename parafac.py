@@ -65,8 +65,9 @@ def evaluate_autoencoder_as_classifier(model, trainX, trainy, testX, testy):
 	# mark all remaining layers as non-trainable
 	for layer in model.layers:
 		layer.trainable = False
+	model.add(Flatten())
 	# add new output layer
-	model.add(Dense(3, activation='softmax'))
+	model.add(Dense(4, activation='softmax'))
 	# compile model
 	model.compile(loss='categorical_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9), metrics=['acc'])
 	# fit model

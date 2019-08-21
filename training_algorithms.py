@@ -8,24 +8,46 @@ sys.path.append("classification")
 from keras.utils import to_categorical#one-hot encode target column
 from sklearn.preprocessing import LabelEncoder
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Flatten
+from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D,Dropout
 from keras.callbacks import ModelCheckpoint
 import functions
 import classes
-import help_functions
+import preprocessing_functions
 import svm
-import help_functions
+import preprocessing_functions
 import matplotlib.pyplot as plt
 
-def train_cnn(environment,subvideo_frames,n_layers,n_units,subvideo_features = -1):
+def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1):
+	if not os.path.exists(out_dir):
+		os.system('mkdir '+ out_dir)
 		
 	if type(n_units)==int:
 		n_units =[n_units]
 	#len ( n_units ) = n_layers.
-	person1,person2,person3,person4 = help_functions.create_person_instances(environment)
+	person1,person2,person3,person4 = preprocessing_functions.create_person_instances(environment)
 	
 	#centering torso and normalizing by height. 
-	help_functions.standardize_person(person1),  help_functions.standardize_person(person2),  help_functions.standardize_person(person3),  help_functions.standardize_person(person4)
+	preprocessing_functions.standardize_person(person1),  preprocessing_functions.standardize_person(person2),  preprocessing_functions.standardize_person(person3),  preprocessing_functions.standardize_person(person4)
+
+	#augmenting
+	"""person1.pos_activities+=functions.activities_data_augmentation_rotation(person1.pos_activities)
+	person2.pos_activities+=functions.activities_data_augmentation_rotation(person2.pos_activities)
+	person3.pos_activities+=functions.activities_data_augmentation_rotation(person3.pos_activities)
+	person4.pos_activities+=functions.activities_data_augmentation_rotation(person4.pos_activities)
+	person1.label+=person1.label
+	person2.label+=person2.label
+	person3.label+=person3.label
+	person4.label+=person4.label
+	person1.pos_activities+=functions.activities_data_augmentation_rotation(person1.pos_activities,2)
+	person2.pos_activities+=functions.activities_data_augmentation_rotation(person2.pos_activities,2)
+	person3.pos_activities+=functions.activities_data_augmentation_rotation(person3.pos_activities,2)
+	person4.pos_activities+=functions.activities_data_augmentation_rotation(person4.pos_activities,2)
+	person1.label+=person1.label
+	person2.label+=person2.label
+	person3.label+=person3.label
+	person4.label+=person4.label"""
+
+
 
 	person1_features = functions.activities_feature_vector(person1.pos_activities,subvideo_features)
 	person2_features = functions.activities_feature_vector(person2.pos_activities,subvideo_features)
@@ -41,7 +63,7 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,subvideo_features = -
 	#contruct training set and test set
 
 	if not env:
-		help_functions.clean(person1_features,person2_features,person3_features,person4_features)
+		preprocessing_functions.clean(person1_features,person2_features,person3_features,person4_features)
 		
 	parted_act1 = functions.partition_activities(person1_features,subvideo_frames)
 	parted_act2 = functions.partition_activities(person2_features,subvideo_frames)
@@ -82,17 +104,19 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,subvideo_features = -
 	model.add(Conv2D(n_units[0], kernel_size=3, activation='relu', input_shape=(X_train.shape[1],X_train.shape[2],1)))
 	for i in range(n_layers-1):
 		model.add(Conv2D(n_units[i+1], kernel_size=3, activation='relu'))
+		model.add(MaxPooling2D(pool_size=2))
+		model.add(Dropout(0.3))
 	model.add(Flatten())
 	model.add(Dense(len(set(y_test)), activation='softmax'))
 	#compile model using accuracy to measure model performance
 	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 	#save the best model
-	filepath=str(n_layers)+"-layer_"+str(n_units)+"_unit_"+environment+"cnn-BestModel.hdf5"
+	filepath= out_dir + "/" + str(n_layers)+"-layer_"+str(n_units)+"_unit_"+environment+"cnn-BestModel.hdf5"
 	checkpoint = ModelCheckpoint(filepath, monitor='val_acc', save_best_only=True, mode='max')
 	callbacks_list = [checkpoint]
 	#train the model
 	history = model.fit(X_train, y_train_num, validation_data=(X_test, y_test_num), epochs=50, callbacks = callbacks_list)
-	help_functions.save_history_training(history,"cnn")
+	preprocessing_functions.save_history_training(history,"cnn",n_layers,n_units,out_dir)
 	#load the best saved model
 	model = Sequential()
 	model.add(Conv2D(n_units[0], kernel_size=3, activation='relu', input_shape=(X_train.shape[1],X_train.shape[2],1)))
@@ -111,7 +135,7 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,subvideo_features = -
 	
 	acc ="%s: %.2f%%" % (model.metrics_names[1], scores[1]*100)
 
-	confusion_name = str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+"cnn-ConfusionMatrix" + acc 
+	confusion_name = out_dir +"/"+ str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+"cnn-ConfusionMatrix" + acc 
 	svm.plot_confusion_matrix(y_test_num2, y_pred_labels, person1.label, confusion_name,
 		                  normalize=True,
 		                  title=environment)
@@ -121,10 +145,10 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,subvideo_features = -
 
 def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=-1):
 	#len(lstm_units) = n_layers. List of units per layer
-	person1,person2,person3,person4 = help_functions.create_person_instances(environment)
+	person1,person2,person3,person4 = preprocessing_functions.create_person_instances(environment)
 	
 	#centering torso and normalizing by height. 
-	help_functions.standardize_person(person1),  help_functions.standardize_person(person2),  help_functions.standardize_person(person3),  help_functions.standardize_person(person4)
+	preprocessing_functions.standardize_person(person1),  preprocessing_functions.standardize_person(person2),  preprocessing_functions.standardize_person(person3),  preprocessing_functions.standardize_person(person4)
 
 	#-1 stands that the features for each frame is in the feature vector of the activity
 	person1_features = functions.activities_feature_vector(person1.pos_activities,n_subvideo_features)
@@ -141,7 +165,7 @@ def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=
 	#contruct training set and test set
 
 	if not env:
-		help_functions.clean(person1_features,person2_features,person3_features,person4_features)
+		preprocessing_functions.clean(person1_features,person2_features,person3_features,person4_features)
 
 
 	parted_act1 = functions.partition_activities(person1_features, subvideo_frames)
@@ -194,13 +218,13 @@ def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=
 	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 	#save the best model
-	filepath=str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+"lstm-BestModel.hdf5"
+	filepath=out_dir + "/" + str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+"lstm-BestModel.hdf5"
 	checkpoint = ModelCheckpoint(filepath, monitor='val_acc', save_best_only=True, mode='max')
 	callbacks_list = [checkpoint]
 	#train the model
 	history = model.fit(X_train, y_train_num, validation_data=(X_test, y_test_num), epochs=50, callbacks = callbacks_list)
 	#plot history and save image
-	help_functions.save_history_training(history,"lstm")
+	preprocessing_functions.save_history_training(history,"lstm",n_layers,n_units, out_dir)
 
 	model = Sequential()
 	model.add(LSTM(n_units[0],input_shape = (X_train.shape[1],X_train.shape[2])))
@@ -220,7 +244,7 @@ def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=
 	
 	scores = model.evaluate(X_test, y_test_num, verbose=0)
 	acc ="%s: %.2f%%" % (model.metrics_names[1], scores[1]*100)
-	confusion_name = str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+"lstm-ConfusionMatrix" + acc
+	confusion_name = out_dir + "/" + str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+"lstm-ConfusionMatrix" + acc
 	svm.plot_confusion_matrix(y_test_num1, y_pred_labels, person1.label, confusion_name,
 		                  normalize=True,
 		                  title=environment)
