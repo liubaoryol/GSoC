@@ -62,7 +62,7 @@ def clean(person1_features,person2_features,person3_features,person4_features):
 	person3.label.pop(2)
 	person4.label.pop(-5)
 
-def save_history_training(history,model,filename = ""):
+def save_history_training(history,model,n_layers,n_units,out_dir,filename = "",):
 	plt.plot(history.history['acc'])
 	plt.plot(history.history['val_acc'])
 	plt.title('model accuracy')
@@ -70,7 +70,7 @@ def save_history_training(history,model,filename = ""):
 	plt.xlabel('epoch')
 	plt.legend(['train', 'test'], loc='upper left')
 	if not filename:
-		filename = str(n_layers)+"-layer_"+str(n_units)+"unit"+environment+model + "Training.png"
+		filename = out_dir+"/" + str(n_layers)+"-layer_"+str(n_units)+"unit"+ model + "Training.png"
 	plt.savefig(filename)
 	plt.clf()
 
