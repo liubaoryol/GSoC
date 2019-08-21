@@ -44,7 +44,7 @@ from matplotlib import pyplot
 def base_autoencoder(trainX, testX):
 	# define model
 	model = Sequential()
-	model.add(Dense(10, input_shape=(X_train.shape[1],X_train.shape[2],1), activation='relu', kernel_initializer='he_uniform'))
+	model.add(Dense(10, input_shape=(X_train.shape[1],X_train.shape[2],1), activation='relu'))
 	model.add(Dense(1, activation='linear'))
 	# compile model
 	model.compile(loss='mse', optimizer=SGD(lr=0.01, momentum=0.9))
@@ -65,7 +65,7 @@ def evaluate_autoencoder_as_classifier(model, trainX, trainy, testX, testy):
 	# mark all remaining layers as non-trainable
 	for layer in model.layers:
 		layer.trainable = False
-	model.add(Flatten())
+	#model.add(Flatten())
 	# add new output layer
 	model.add(Dense(4, activation='softmax'))
 	# compile model
