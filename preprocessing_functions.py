@@ -39,17 +39,12 @@ def standardize_person(person):
 	torso_centered=functions.center_torso(functions.pos(person.activity))
 	person.pos_activities = functions.normalize_by_height_all(torso_centered)
 
-def clean(person1_features,person2_features,person3_features,person4_features):
+def clean_feat(person1_features,person2_features,person3_features,person4_features):
 	#Removing the none activity	
 	person1_features.pop(0)
 	person2_features.pop(-2)
 	person3_features.pop(-2)
 	person4_features.pop(-2)
-
-	person1.label.pop(0)
-	person2.label.pop(-2)
-	person3.label.pop(-2)
-	person4.label.pop(-2)
 
 	#removing the random activity
 	person1_features.pop(10)
@@ -57,11 +52,17 @@ def clean(person1_features,person2_features,person3_features,person4_features):
 	person3_features.pop(2)
 	person4_features.pop(-5)
 
+def clean_lab(person1,person2,person3,person4):
+
+	person1.label.pop(0)
+	person2.label.pop(-2)
+	person3.label.pop(-2)
+	person4.label.pop(-2)
+
 	person1.label.pop(10)
 	person2.label.pop(10)
 	person3.label.pop(2)
 	person4.label.pop(-5)
-
 def save_history_training(history,model,n_layers,n_units,out_dir,filename = "",):
 	plt.plot(history.history['acc'])
 	plt.plot(history.history['val_acc'])

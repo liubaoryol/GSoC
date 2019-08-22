@@ -1,21 +1,29 @@
 import sys
 import os
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 sys.path.append("feature_extraction")
 sys.path.append("data_preparation")
 sys.path.append("classification")
-from keras.utils import to_categorical#one-hot encode target column
-from sklearn.preprocessing import LabelEncoder
-from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D,Dropout
-from keras.callbacks import ModelCheckpoint
 import functions
 import classes
 import preprocessing_functions
 import svm
 import preprocessing_functions
 import matplotlib.pyplot as plt
+from numpy import argmax
+from keras.utils import to_categorical#one-hot encode target column
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D,Dropout
+from keras.callbacks import ModelCheckpoint
+from sklearn.metrics import accuracy_score
+from keras.models import load_model
+from keras.utils import plot_model
+from keras.models import Model
+from keras.layers import Input
+from keras.layers import Dense
+from keras.layers.merge import concatenate
+
 
 def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1):
 	if not os.path.exists(out_dir):
@@ -29,7 +37,7 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 	#centering torso and normalizing by height. 
 	preprocessing_functions.standardize_person(person1),  preprocessing_functions.standardize_person(person2),  preprocessing_functions.standardize_person(person3),  preprocessing_functions.standardize_person(person4)
 
-	#augmenting
+	#augmenting data (rotating to #radians)
 	"""person1.pos_activities+=functions.activities_data_augmentation_rotation(person1.pos_activities)
 	person2.pos_activities+=functions.activities_data_augmentation_rotation(person2.pos_activities)
 	person3.pos_activities+=functions.activities_data_augmentation_rotation(person3.pos_activities)
@@ -37,7 +45,8 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 	person1.label+=person1.label
 	person2.label+=person2.label
 	person3.label+=person3.label
-	person4.label+=person4.label
+	person4.label+=person4.label"""
+	"""
 	person1.pos_activities+=functions.activities_data_augmentation_rotation(person1.pos_activities,2)
 	person2.pos_activities+=functions.activities_data_augmentation_rotation(person2.pos_activities,2)
 	person3.pos_activities+=functions.activities_data_augmentation_rotation(person3.pos_activities,2)
@@ -63,7 +72,8 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 	#contruct training set and test set
 
 	if not env:
-		preprocessing_functions.clean(person1_features,person2_features,person3_features,person4_features)
+		preprocessing_functions.clean_feat(person1_features,person2_features,person3_features,person4_features)
+		preprocessing_functions.clean_lab(person1,person2,person3,person4)
 		
 	parted_act1 = functions.partition_activities(person1_features,subvideo_frames)
 	parted_act2 = functions.partition_activities(person2_features,subvideo_frames)
@@ -140,7 +150,7 @@ def train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_feat
 		                  normalize=True,
 		                  title=environment)
 	plt.close()
-	return model,X_train,X_test,y_train_num,y_test_num
+	return model, X_train, y_train_num, X_test, y_test_num
 
 
 def train_lstm(environment,subvideo_frames,n_layers,n_units,n_subvideo_features=-1):
@@ -258,7 +268,81 @@ def transfer_learning(har_model,X_train,y_train_num,X_test,y_test_num):
 	#Transfer learning where we define weights to star the learning from. Weights are not freezed
 	model = Sequential()
 	model.add(har_model)
+	#model.add(Flatten())
+	#model.add(Dense(13, activation='softmax'))
 	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 	history = model.fit(X_train, y_train_num, validation_data=(X_test, y_test_num), epochs=50)
 
+
+# load models from file
+def get_models(n_models,environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1):
+	all_models = list()
+	for i in range(n_models):
+		# define filename for this ensemble
+		model = train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features)
+		# add to list of members
+		all_models.append(model)
+	return all_models
+ 
+# define stacked model from multiple member input models
+def define_stacked_model(members):
+	# update all layers in all models to not be trainable
+	for i in range(len(members)):
+		model = members[i]
+		for layer in model.layers:
+			# make not trainable
+			layer.trainable = False
+			# rename to avoid 'unique layer name' issue
+			layer.name = 'ensemble_' + str(i+1) + '_' + layer.name
+	# define multi-headed input
+	ensemble_visible = [model.input for model in members]
+	# concatenate merge output from each model
+	ensemble_outputs = [model.output for model in members]
+	merge = concatenate(ensemble_outputs)
+	hidden = Dense(10, activation='relu')(merge)
+	output = Dense(members[0].output_shape[1], activation='softmax')(hidden)
+	model = Model(inputs=ensemble_visible, outputs=output)
+	# plot graph of ensemble
+	#plot_model(model, show_shapes=True, to_file='model_graph.png')
+	# compile
+	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+	return model
+ 
+# fit a stacked model
+def fit_stacked_model(model, inputX, inputy,testX,testy,epochs=100):
+	# the output should be already encoded
+	# prepare input data
+	X_train = [inputX for _ in range(len(model.input))]
+	X_test = [testX for _ in range(len(model.input))]
+	
+	# fit model
+	model.fit(X_train, inputy, epochs, validation_data=(X_test, testy),verbose=0)
+ 
+# make a prediction with a stacked model
+def predict_stacked_model(model, inputX):
+	# prepare input data
+	X = [inputX for _ in range(len(model.input))]
+	# make prediction
+	return model.predict(X, verbose=0)
+"""
+# generate 2d classification dataset
+X, y = make_blobs(n_samples=1100, centers=3, n_features=2, cluster_std=2, random_state=2)
+# split into train and test
+n_train = 100
+trainX, testX = X[:n_train, :], X[n_train:, :]
+trainy, testy = y[:n_train], y[n_train:]
+print(trainX.shape, testX.shape)
+# load all models
+n_members = 5
+members = load_all_models(n_members)
+print('Loaded %d models' % len(members))
+# define ensemble model
+stacked_model = define_stacked_model(members)
+# fit stacked model on test dataset
+fit_stacked_model(stacked_model, testX, testy)
+# make predictions and evaluate
+yhat = predict_stacked_model(stacked_model, testX)
+yhat = argmax(yhat, axis=1)
+acc = accuracy_score(testy, yhat)
+print('Stacked Test Accuracy: %.3f' % acc) """
 
