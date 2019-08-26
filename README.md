@@ -7,7 +7,7 @@ Development of the Human Activity Recognition component
  
  You can train a LSTM or a CNN model.
  
- 2. Train cnn algorithm using 
+ 2. After importing training_algorithms, train cnn algorithm using 
  
 ```commandline
 training_algorithms.train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1)
@@ -16,7 +16,7 @@ For example:
 
 
 ```commandline
-training_algorithms.cnn("kitchen",50,1,30,".")
+training_algorithms.train_cnn("kitchen",50,1,30,".")
 ```
 The options for environment are: "kitchen", "livingroom", "bathroom", "bedroom", "office" or "all".
  
