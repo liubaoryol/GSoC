@@ -1,0 +1,4 @@
+0511130523,rinsing mouth with water,
+0511130138,brushing teeth,
+0511130920,wearing contact lenses,
+0511131018,wearing contact lenses,

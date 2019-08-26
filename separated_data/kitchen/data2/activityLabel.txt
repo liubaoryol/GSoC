@@ -1,0 +1,6 @@
+0510161658,drinking water,
+0510163444,opening pill container,
+0510163513,opening pill container,
+0510163542,opening pill container,
+0510163840,cooking (stirring),
+0510164129,cooking (chopping),

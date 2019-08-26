@@ -1,0 +1,6 @@
+0511121954,drinking water,
+0511123142,opening pill container,
+0511123218,opening pill container,
+0511123238,opening pill container,
+0511124101,cooking (stirring),
+0511124349,cooking (chopping),

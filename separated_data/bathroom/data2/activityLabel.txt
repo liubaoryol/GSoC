@@ -1,0 +1,4 @@
+0510171120,rinsing mouth with water,
+0510170707,brushing teeth,
+0510171427,wearing contact lenses,
+0510171507,wearing contact lenses,

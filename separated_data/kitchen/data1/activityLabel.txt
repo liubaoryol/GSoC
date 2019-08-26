@@ -1,0 +1,6 @@
+0512171207,cooking (chopping),
+0512171444,cooking (stirring),
+0512173312,drinking water,
+0512173520,opening pill container,
+0512173548,opening pill container,
+0512173623,opening pill container,

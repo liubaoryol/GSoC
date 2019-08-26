@@ -1,0 +1,6 @@
+0512150912,drinking water,
+0512151857,opening pill container,
+0512151934,opening pill container,
+0512152013,opening pill container,
+0512152416,cooking (stirring),
+0512152943,cooking (chopping),
