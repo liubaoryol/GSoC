@@ -1,3 +1,7 @@
+# Google Summer of Code 2019
+## RoboComp
+Development of the Human Activity Recognition component
+
 ## To use
 
  1. Download the CAD-60 dataset in the following [link](http://pr.cs.cornell.edu/humanactivities/data.php).
@@ -17,8 +21,8 @@
 
 - read_data.py is where we create objects of class Person() and use its functions
 
-- 
+- functions.py in the folder feature_extraction contains help functions for selection and organization of features. feature_selection.py is the script that contains parafac and greedy unsupervised learning
 
 - svm.py contains the script for plotting the confusion matrix
 
-- training_algorithms.py is the script where all the training comes, and uses all the scripts mentioned before. It contains the train_cnn, train_lstm, transfer learning and ensemble learning.
+- training_algorithms.py is the main script, the one that you will be using. It contains all the training algorithm. Specifically, it contains the train_cnn, train_lstm, transfer learning and ensemble learning.
