@@ -3,47 +3,43 @@ Development of the Human Activity Recognition component
 
 ## To use
 
- 1. Clone the repository. The needed data separated into environments is located in the folder separated_data. The dataset used for this work can be found in the following [link](http://pr.cs.cornell.edu/humanactivities/data.php).
+ 1. Clone the repository. The needed data separated into environments is located in the folder separated_data. The whole dataset used for this work can be found in the following [link](http://pr.cs.cornell.edu/humanactivities/data.php)
  
- You can train lstm or a cnn model.
+ You can train LSTM or a CNN model.
  
  3. Train cnn algorithm using 
  
 ```commandline
 training_algorithms.train_cnn(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1)
-
 ```
 For example:
 
 
 ```commandline
 training_algorithms.cnn("kitchen",50,1,30,".")
-
 ```
 The options for environment are: "kitchen", "livingroom", "bathroom", "bedroom", "office" or "all".
  
  Analogously you can train a lstm model using 
  
 ```commandline
-training_algorithms.train_lstm(...)
-
+training_algorithms.train_lstm(environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1)
 ```
+ Both commands output model, X_train, y_train, X_test, y_test
  
  4. You may apply transfer learning to some environments to improve accuracy. I recommend to use the base environment the kitchen since it has the best accuracy. To obtain a model just run one of the commands 3.1 or 3.2. To apply the code do 
  
- 
 ```commandline
 training_algorithms.transfer_learning(har_model,X_train,y_train_num,X_test,y_test_num)
-
 ```
+here the variable har_model is obtained from training a previous model with train_cnn or train_lstm. These functions output the model, which then will be reused for transfer learning
  
  5. To do ensemble learning run
  
 ```commandline
 ensemble_and_fit(n_members,environment,subvideo_frames,n_layers,n_units,out_dir,subvideo_features = -1)
-
 ```
- 
+n_members is the number of neural networks you want to ensemble
  
  
 
