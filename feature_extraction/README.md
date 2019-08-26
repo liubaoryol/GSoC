@@ -1,4 +1,4 @@
-#Feature selection
+# Feature selection
 
 The correct selection of features is the most important part for our classification algotithms to work 
 The selection of features will follow the next few papers and options:
