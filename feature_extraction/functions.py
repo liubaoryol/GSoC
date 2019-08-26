@@ -239,21 +239,3 @@ def multiplicate_labels(parted_activities,labels):
 			multiple_labels.append(labels[i])
 	return multiple_labels
 
-
-	
-'''
-def PCA(features):
-
-
-	#extract features one: velocities and that.
-	#extraction2: PCA analysis
-
-
-
-	embedding=umap.UMAP(n_components=2,n_neighbors=25,spread=2,metric=metric,verbose=True)
-	H = embedding.fit_transform(data,y=cols)
-	fig = plt.figure()
-	plt.scatter(H[:,0],H[:,1],c=cols,s=5)
-	plt.show()
-'''	
-
